@@ -24,6 +24,9 @@ namespace CoreGame
         private bool lockLook = false;
         [HideInInspector] public Quaternion targetRotation;
 
+        [Header(" CastHandlers ")] 
+        [SerializeField] private CastHandler[] castHandlers;
+
         
         public void Init(AnimationHandler _animationHandler)
         {

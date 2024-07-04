@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,6 +35,9 @@ public class HUDManager : MonoBehaviour
     [SerializeField] private Image signatureFillImage;
     private Tweener hpTweener;
 
+    [Header(" Abilities ")]
+    [SerializeField] private AbilityViewHUD[] abilityViewHuds;
+
 
     public void Init(Player _player)
     {
@@ -57,6 +61,12 @@ public class HUDManager : MonoBehaviour
         hpTweener = DOVirtual.Float(hpFillImage.fillAmount, targetValue, duration,
             (value => hpFillImage.fillAmount = value));
     }
+
+    #endregion
+
+    #region Ability
+
+    public AbilityViewHUD GetAbilityViewByIndex(int index) => abilityViewHuds[index];
 
     #endregion
 }
