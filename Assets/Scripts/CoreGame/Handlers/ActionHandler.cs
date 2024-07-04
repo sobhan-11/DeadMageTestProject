@@ -61,7 +61,7 @@ namespace CoreGame
             }
             else
             {
-                animationHandler.PlayWalkAnimation(moveInput);
+                animationHandler.PlayWalkAnimation(moveInput , moveSpeed);
                 //TODO SFX on stop walk
             }
         }

@@ -8,6 +8,7 @@ namespace CoreGame
 
         [Header("Const - Walk")] 
         private const string WALK = "Walk";
+        private const string WALK_SPEEED = "MovementSpeed";
         private const string DASH = "Dash";
 
 
@@ -19,9 +20,10 @@ namespace CoreGame
         
         #region Walk
         
-        public void PlayWalkAnimation(Vector2 dir)
+        public void PlayWalkAnimation(Vector2 dir , float moveSpeed = 1f)
         {
             animator.SetBool(WALK, true);
+            animator.SetFloat(WALK_SPEEED,moveSpeed);
         }
 
         public void StopWalk() => animator.SetBool(WALK, false);

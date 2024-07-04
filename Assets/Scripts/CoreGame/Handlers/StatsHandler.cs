@@ -30,7 +30,6 @@ namespace CoreGame
             stats = new Dictionary<Enum_StatsType, Stat>();
             
             stats.Add(Enum_StatsType.HP, new StatHP(initStats.maxHP, (int)(initStats.maxHP * initStats.statPercent)));
-            stats.Add(Enum_StatsType.MoveSpeed, new StatMoveSpeed(initStats.maxMoveSpeed, (int)(initStats.maxMoveSpeed * initStats.statPercent)));
         }
         
         #endregion
