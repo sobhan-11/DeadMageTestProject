@@ -11,7 +11,7 @@ namespace CoreGame
         private Dictionary<Enum_StatsType,Stat> stats;
         private bool isDead;
 
-        public Action<float> onTakeDamage;
+        public Action<float,float> onTakeDamage;
         public Action<StatsHandler> onDeath;
 
         #region Initial
@@ -42,7 +42,7 @@ namespace CoreGame
             hp.UseStat(damage,Death);
             
             // TODO Play Damage VFX in visual handler
-            onTakeDamage?.Invoke(hp.GetCurrentValuePercent());
+            onTakeDamage?.Invoke(damage,hp.GetCurrentValuePercent());
         }
         
         #endregion
@@ -79,7 +79,6 @@ namespace CoreGame
     {
         public float statPercent;
         public int maxHP;
-        public int maxMoveSpeed;
     }
 }
 

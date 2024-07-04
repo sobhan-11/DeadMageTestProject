@@ -5,35 +5,17 @@ using CoreGame;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class Player : Actor
 {
-    [Header("Components"), Space] 
-    [SerializeField] private ActorHandler actorHandler;
-    [SerializeField] private StatsHandler statsHandler;
+    [Header("Components"), Space]
     [SerializeField] private ActionHandler actionHandler;
     [SerializeField] private PlayerInput playerInput;
-    private InputHandler inputHandler;
+    private InputHandler _inputHandler;
+    private HUDManager _hudManager;
 
     [Header("Desired Inputs")] 
     private Vector2 moveInput;
-
-    private void Awake()
-    {
-        statsHandler.Init(new InitStat()
-        {
-            maxHP = 150,
-            maxMoveSpeed = 5,
-            statPercent = 1
-        });
-        
-        actionHandler.Init(new AnimationHandler(GetComponentInChildren<Animator>()));
-        
-        playerInput.enabled=false;
-        
-        if (inputHandler == null) 
-            inputHandler = new InputHandler(playerInput);
-    }
-
+    
     private void Start()
     {
         // Set Input for just auth player not others
@@ -42,13 +24,43 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        moveInput = inputHandler.GatherMoveInput();
+        moveInput = _inputHandler.GatherMoveInput();
     }
 
     private void FixedUpdate()
     {
         actionHandler.ApplyMove(moveInput);
     }
+
+    #region Actor
+
+    public override void Init()
+    {
+        statsHandler.Init(new InitStat()
+        {
+            maxHP = 150,
+            statPercent = 1
+        });
+        actionHandler.Init(_animationHandler);
+        playerInput.enabled=false;
+        
+        if (_inputHandler == null) 
+            _inputHandler = new InputHandler(playerInput);
+        
+        _hudManager = HUDManager.instance;
+    }
+
+    public override Enum_TeamType TeamType => Enum_TeamType.Wizard;
+    
+    public override void OnTakeDamage(float damage,float currentHP)
+    {
+        ShowDamageVisual(damage);
+        _hudManager.SetHpBar(currentHP);
+    }
+    
+    private void OnUseSignature(float currentSignature) => _hudManager.SetSignatureBar(currentSignature);
+
+    #endregion
 
     #region Validation
 

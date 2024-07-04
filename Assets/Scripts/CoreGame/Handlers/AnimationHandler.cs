@@ -10,6 +10,7 @@ namespace CoreGame
         private const string WALK = "Walk";
         private const string WALK_SPEEED = "MovementSpeed";
         private const string DASH = "Dash";
+        private const string HIT = "Hit";
 
 
         public AnimationHandler(Animator _animator)
@@ -36,5 +37,13 @@ namespace CoreGame
 
         #endregion
 
+        #region Hit
+
+        public void PlayHitAnimation()
+        {
+            animator.SetTrigger(HIT);
+        }
+
+        #endregion
     }
 }
