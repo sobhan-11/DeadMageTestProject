@@ -6,8 +6,9 @@ using UnityEngine.Events;
 
 namespace CoreGame
 {
-    public class CastHandler : MonoBehaviour
+    public class CastHandler : MonoBehaviour , IAbilitySource
     {
+        private Actor _owner;
         private ActionHandler _actionHandler;
         private AbilityViewHUD _abilityViewHUD;
         
@@ -25,9 +26,11 @@ namespace CoreGame
         public UnityEvent onEndAbility;
 
         private AbilityAction _currentAction;
+        [HideInInspector] public ActionInfo currentActionInfo; 
 
-        public void Init(ActionHandler actionHandler)
+        public void Init(Actor actor,ActionHandler actionHandler)
         {
+            _owner = actor;
             _actionHandler = actionHandler;
             isUsing = false;
             for (int i = 0; i < abilities.Count; i++)
@@ -40,13 +43,13 @@ namespace CoreGame
 
         }
         
-        public void StartCast()
+        public void StartCast(ActionInfo info)
         {
             _currentAction = actions.Find(x => x.castOrder == currentActionOrder);
             isUsing = true;
 
             onStartAbility?.Invoke();
-            InvokeAction(_currentAction);
+            InvokeAction(_currentAction,info);
         }
         
         #region Events
@@ -161,11 +164,20 @@ namespace CoreGame
 
         #region Action
 
-        private void InvokeAction(AbilityAction action)
+        private void InvokeAction(AbilityAction action , ActionInfo info)
         {
-            action.InvokeAction();
+            action.InvokeAction(info);
         }
         
+        #endregion
+
+        #region IAbilitySource
+
+        public Enum_TeamType GetTeamID()
+        {
+            return _owner.TeamType;
+        }
+
         #endregion
 
         #region Utils
@@ -174,6 +186,8 @@ namespace CoreGame
         public void DisableMove() => _actionHandler.DisableMove();
 
         #endregion
+
+        
     }
     
     [Serializable]

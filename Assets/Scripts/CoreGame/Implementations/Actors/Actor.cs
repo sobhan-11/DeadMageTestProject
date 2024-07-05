@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace CoreGame
 {
-    public abstract class Actor : MonoBehaviour
+    public abstract class Actor : MonoBehaviour , ITargetable
     {
         [Header("Components"), Space]
-        [SerializeField] protected StatsHandler statsHandler;
+        [SerializeField] public StatsHandler statsHandler;
         [SerializeField] protected GFXHandler gfxHandler;    
         [SerializeField] protected AnimationHandler animationHandler;
 
@@ -38,6 +38,12 @@ namespace CoreGame
             gfxHandler.PlayDamageVFX(damage);
         }
 
+        #region ITargetable
+
+        public Enum_TeamType ID() => TeamType;
+
+        #endregion
+        
         #region Utils
 
         protected void MoveToGroundOnDeath(Action onComplete = null)
@@ -50,5 +56,10 @@ namespace CoreGame
         }
 
         #endregion
+    }
+    
+    public interface ITargetable
+    {
+        public Enum_TeamType ID();
     }
 }

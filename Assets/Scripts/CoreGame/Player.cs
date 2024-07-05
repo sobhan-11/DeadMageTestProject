@@ -16,6 +16,7 @@ public class Player : Actor
     [Header("Desired Inputs")] 
     private Vector2 moveInput;
     private bool dashInput;
+    private bool cast1Input;
     
     private void Start()
     {
@@ -27,16 +28,19 @@ public class Player : Actor
     {
         moveInput = _inputHandler.GatherMoveInput();
         dashInput = _inputHandler.GatherDashInput();
+        cast1Input = _inputHandler.GatherCast1Input();
     }
 
     private void FixedUpdate()
     {
         actionHandler.ApplyMove(moveInput);
         actionHandler.HandleDash(dashInput);
+        actionHandler.OnCast_1(cast1Input);
     }
 
     #region Actor
-
+    public override Enum_TeamType TeamType => Enum_TeamType.Wizard;
+    
     public override void Init()
     {
         statsHandler.Init(new InitStat()
@@ -44,7 +48,7 @@ public class Player : Actor
             maxHP = 150,
             statPercent = 1
         });
-        actionHandler.Init(animationHandler);
+        actionHandler.Init(this , animationHandler);
         playerInput.enabled=false;
         
         if (_inputHandler == null) 
@@ -53,8 +57,6 @@ public class Player : Actor
         _hudManager = HUDManager.instance;
     }
 
-    public override Enum_TeamType TeamType => Enum_TeamType.Wizard;
-    
     public override void OnTakeDamage(float damage,float currentHP)
     {
         ShowDamageVisual(damage);

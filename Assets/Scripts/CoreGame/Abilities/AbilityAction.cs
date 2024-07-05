@@ -19,12 +19,6 @@ namespace CoreGame
         public float preCastTime; 
         public float postCastTime; 
         
-        [Header("-- PreCastEvents --") , Space(5)] 
-        public ActionPack preCastActions;
-        
-        [Header("-- PreCastEvents --") , Space(5)] 
-        public ActionPack castActions;
-        
         [Header("-- CoolDown --") , Space(5)]
         public float coolDown;
         
@@ -34,6 +28,14 @@ namespace CoreGame
         
         [Header("-- AbilityEndAction --")]
         public bool endsAbility;
+        
+        [Header("-- PreCastEvents --") , Space(5)] 
+        public ActionPack preCastActions;
+
+        [Header("-- PreCastEvents --") , Space(5)] 
+        public ActionPack castActions;
+        
+        internal ActionInfo currentInfo;
 
         /// <summary>
         /// controling main logic loop
@@ -102,27 +104,29 @@ namespace CoreGame
 
         #region FireEvents
         
-        public void InvokeAction()
+        public void InvokeAction(ActionInfo info)
         {
             if (isUsing)
             {
                 return;
             }
-            
+
+            currentInfo = info;
+            _castHandler.currentActionInfo = currentInfo;
             isUsing = true;
         }
 
         private void StartAction()
         {
             isStarted = true;
-            preCastActions.FireEvents();
+            preCastActions.FireEvents(currentInfo);
         }
         
         private void CastAction()
         {
             isCasted = true;
             
-            castActions.FireEvents();
+            castActions.FireEvents(currentInfo);
             HandleCastOrderChange();
         }
         
@@ -183,10 +187,14 @@ namespace CoreGame
     public class ActionPack
     {
         public UnityEvent actions;
+        public UnityEvent<ActionInfo> actionsWithInfo;
         
-        public void FireEvents()
+        public void FireEvents(ActionInfo actionInfo)
         {
             actions?.Invoke();
+            
+            if(actionInfo!=null)
+                actionsWithInfo?.Invoke(actionInfo);
         }
     }
 }

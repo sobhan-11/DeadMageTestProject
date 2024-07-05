@@ -7,6 +7,8 @@ namespace CoreGame
 {
     public class ActionHandler : MonoBehaviour
     {
+        private Actor _owner;
+        
         [Header(" Components "), Space(5)]
         [SerializeField] private CharacterController body;
         private AnimationHandler _animationHandler;
@@ -30,12 +32,13 @@ namespace CoreGame
         [SerializeField] private CastHandler[] castHandlers;
 
         
-        public void Init(AnimationHandler animationHandler)
+        public void Init(Actor actor,AnimationHandler animationHandler)
         {
+            _owner = actor;
             _animationHandler = animationHandler;
             velocity=Vector3.zero;
             InitCastHandlers();
-            OnEndAbilities();
+            EnableMove();
         }
 
         #region Move
@@ -114,22 +117,17 @@ namespace CoreGame
             if(!isDashPressed)
                 return;
             var caster0 = castHandlers[0]; // Dash as a passive ability should always be index 0 in casthandlers list.
-            var abilityDash = (caster0.abilities[0] as AbilityDash);
             if (caster0.isUsing)
                 return;
             if(!CanUse()) // Check For Ability intruption
                 return;
-            
-            caster0.StartCast();
-            // DisableMove();
-            //
-            //
-            // animationHandler.SetDashState(true);
-            // abilityDash.ApplyDash(()=>
-            // {
-            //     animationHandler.SetDashState(false);
-            //     OnEndAbilities();
-            // });
+
+            var info = new ActionInfo()
+            {
+                teamId = _owner.TeamType,
+                direction = transform.forward
+            };
+            caster0.StartCast(info);
         }
 
         #endregion
@@ -140,13 +138,29 @@ namespace CoreGame
         {
             for (int i = 0; i < castHandlers.Length; i++)
             {
-                castHandlers[i].Init(this);
+                castHandlers[i].Init(_owner,this);
             }
         }
 
-        private void OnEndAbilities()
+        public void OnCast_1(bool isCast1Pressed)
         {
-            EnableMove();
+            if(!isCast1Pressed)
+                return;
+            var caster1 = castHandlers[1];
+            if (caster1.isUsing)
+                return;
+            if(!CanUse()) // Check For Ability intruption
+                return;
+            var info = new ActionInfo()
+            {
+                startTime = Time.time,
+                teamId = _owner.TeamType,
+                direction = transform.forward,
+                range = 5,
+                endPoint = transform.position + transform.forward * 5,
+                startPoint = transform.position
+            };
+            caster1.StartCast(info);
         }
 
         #endregion

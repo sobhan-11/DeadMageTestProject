@@ -62,7 +62,7 @@ public class AbilityDash : Ability
     public void OnDashEnd()
     {
         isEnable = false;
-        _castHandler.EndAbility();
+        (_castHandler as CastHandler).EndAbility();
     }
 
 
