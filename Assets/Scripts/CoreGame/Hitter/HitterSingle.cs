@@ -8,7 +8,7 @@ namespace CoreGame
         public int maxPossibleHits;
         public bool dontDestroy;
 
-        [HideInInspector] public int targetsHitSoFar;
+        public int targetsHitSoFar;
 
 
         public override void TriggerEnter(Collider other)

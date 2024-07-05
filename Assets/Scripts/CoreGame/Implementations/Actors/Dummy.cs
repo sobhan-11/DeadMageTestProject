@@ -22,11 +22,11 @@ namespace CoreGame
             hpBar.Init();
         }
 
-        public override void OnTakeDamage(float damage,float currentHp)
+        public override void OnTakeDamage(float damage,float currentHpPercent)
         {
             ShowDamageVisual(damage);
             animationHandler.PlayHitAnimation();
-            hpBar.SetHpBar(currentHp);
+            hpBar.SetHpBar(currentHpPercent);
         }
 
         public override void OnDeath()

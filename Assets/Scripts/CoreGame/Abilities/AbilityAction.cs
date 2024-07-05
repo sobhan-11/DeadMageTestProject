@@ -142,6 +142,10 @@ namespace CoreGame
             {
                 _castHandler.EndAbility();
             }
+            else
+            {
+                _castHandler.EndAbility(false);
+            }
         }
 
         #endregion

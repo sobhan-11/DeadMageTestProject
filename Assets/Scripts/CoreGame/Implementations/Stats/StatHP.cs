@@ -29,7 +29,7 @@ namespace CoreGame
             }
         }
 
-        public float GetCurrentValuePercent() => CurrentValue / MaxValue;
+        public float GetCurrentValuePercent() => (float) CurrentValue / MaxValue;
         
         public override int GetCurrentValue() => CurrentValue;
 

@@ -39,8 +39,8 @@ namespace CoreGame
         public void TakeDamage(int damage)
         {
             StatHP hp = stats[Enum_StatsType.HP] as StatHP;
-            hp.UseStat(damage,Death);
             
+            hp.UseStat(damage,Death);
             // TODO Play Damage VFX in visual handler
             onTakeDamage?.Invoke(damage,hp.GetCurrentValuePercent());
         }

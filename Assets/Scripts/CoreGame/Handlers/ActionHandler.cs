@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace CoreGame
@@ -151,6 +152,7 @@ namespace CoreGame
                 return;
             if(!CanUse()) // Check For Ability intruption
                 return;
+            // var spawnPlace = caster1.spawnPlace ? caster1.spawnPlace.position : transform.position;
             var info = new ActionInfo()
             {
                 startTime = Time.time,

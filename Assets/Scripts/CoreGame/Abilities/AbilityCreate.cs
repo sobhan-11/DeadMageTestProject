@@ -18,6 +18,7 @@ public class AbilityCreate : Ability
         if (_castHandler != null)
         {
             castInfo.teamId = _castHandler.GetTeamID();
+            castInfo.startPoint = spawnPlace.position;
         }
         else
         {

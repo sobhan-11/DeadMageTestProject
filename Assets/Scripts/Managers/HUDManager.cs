@@ -66,7 +66,7 @@ public class HUDManager : MonoBehaviour
 
     #region Ability
 
-    public AbilityViewHUD GetAbilityViewByIndex(int index) => abilityViewHuds[index];
+    public AbilityViewHUD GetAbilityViewByIndex(int index) => abilityViewHuds[index-1];
 
     #endregion
 }

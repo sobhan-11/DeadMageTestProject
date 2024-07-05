@@ -148,7 +148,7 @@ namespace CoreGame
             
             if (destroyAtEnd)
             {
-                Destroy(this.gameObject,1f);
+                Destroy(this.gameObject);
             }
         }
 
