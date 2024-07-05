@@ -136,7 +136,8 @@ namespace CoreGame
             }
 
             lookDir.y = 0;
-            transform.forward = lookDir;
+            if(lookDir!=Vector3.zero)
+                transform.forward = lookDir;
         }
 
         void EndOfPath()

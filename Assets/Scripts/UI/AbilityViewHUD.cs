@@ -10,6 +10,7 @@ namespace UI
     public class AbilityViewHUD : MonoBehaviour
     {
         [SerializeField] private int index;
+        public InputKey inputKey;
 
         [Header(" CoolDown ")]
         [SerializeField] private Image[] coolDownImages;
@@ -19,10 +20,20 @@ namespace UI
 
         [Header(" AbilityInput ")] 
         [SerializeField] private Image abilityInputImage;
+        private InputModel _inputModel;
+
+        public void Init(InputModel inputModel)
+        {
+            _inputModel = inputModel;
+            abilityInputImage.sprite = _inputModel.enableIcon;
+            coolDownText.text = "";
+            _coolDownFillAmount = 0f;
+        }
 
         public void StartCoolDown(float coolDown)
         {
             coolDownText.text = coolDown.ToString("0000");
+            abilityInputImage.sprite = _inputModel.disableIcon;
 
             if(_coolDownRoutine!=null)
                 StopCoroutine(_coolDownRoutine);
@@ -50,8 +61,12 @@ namespace UI
                 yield return waitTime;
             }
             coolDownText.text = "";
-            _coolDownFillAmount = 1f;
-            // TODO Activate Input Image
+            _coolDownFillAmount = 0f;
+            foreach (var iamge in coolDownImages)
+            {
+                iamge.fillAmount = _coolDownFillAmount;
+            }
+            abilityInputImage.sprite = _inputModel.enableIcon;
         }
     }
 }

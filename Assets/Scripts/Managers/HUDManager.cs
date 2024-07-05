@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UI;
 using UnityEngine;
@@ -22,7 +24,8 @@ public class HUDManager : MonoBehaviour
         }
     }
 
-    private Player player;
+    private Controller _controllerModel;
+    public ControllerModel model;
     
     [Header(" Avatar "), Space]
     [SerializeField] private CanvasGroup canvasGroup;
@@ -38,11 +41,18 @@ public class HUDManager : MonoBehaviour
     [Header(" Abilities ")]
     [SerializeField] private AbilityViewHUD[] abilityViewHuds;
 
-
-    public void Init(Player _player)
+    private void Start()
     {
-        player = _player;
-        // TODO Set Values
+        Init();
+    }
+
+    public void Init()
+    {
+        _controllerModel = model.GetCurrentControllerModel();
+        foreach (var abilityView in abilityViewHuds)
+        {
+            abilityView.Init(_controllerModel.inputModels.FirstOrDefault(i=>i.key==abilityView.inputKey));
+        }
     }
 
     #region HP-Bar

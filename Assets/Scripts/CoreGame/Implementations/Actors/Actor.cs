@@ -29,7 +29,7 @@ namespace CoreGame
         public abstract Enum_TeamType TeamType { get; }
         public virtual void Init(){}
         public abstract void OnTakeDamage(float damage,float currentHpPercent);
-        public virtual void OnDeath()
+        public virtual void OnDeath(StatsHandler statsHandler)
         {
             
         }

@@ -29,7 +29,7 @@ namespace CoreGame
             hpBar.SetHpBar(currentHpPercent);
         }
 
-        public override void OnDeath()
+        public override void OnDeath(StatsHandler statsHandler)
         {
             StartCoroutine(DeathRoutine());
         }
