@@ -6,7 +6,12 @@ namespace CoreGame
 {
     public class Ability : MonoBehaviour
     {
+        protected CastHandler _castHandler;
         
+        public void Init(CastHandler castHandler)
+        {
+            _castHandler = castHandler;
+        }
     }
 }
 

@@ -15,6 +15,7 @@ public class Player : Actor
 
     [Header("Desired Inputs")] 
     private Vector2 moveInput;
+    private bool dashInput;
     
     private void Start()
     {
@@ -25,11 +26,13 @@ public class Player : Actor
     private void Update()
     {
         moveInput = _inputHandler.GatherMoveInput();
+        dashInput = _inputHandler.GatherDashInput();
     }
 
     private void FixedUpdate()
     {
         actionHandler.ApplyMove(moveInput);
+        actionHandler.HandleDash(dashInput);
     }
 
     #region Actor

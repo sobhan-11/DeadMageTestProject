@@ -21,19 +21,19 @@ namespace CoreGame
 
         private void SubscribeToInput()
         {
-            moveInputAction=playerInput.actions.FindAction("Movement");
-            dashInputAction=playerInput.actions.FindAction("Dash");
-            cast1InputAction=playerInput.actions.FindAction("Cast1");
+            moveInputAction = playerInput.actions.FindAction("Movement");
+            dashInputAction = playerInput.actions.FindAction("Dash");
+            cast1InputAction = playerInput.actions.FindAction("Cast1");
         }
 
         #region GatherInput
 
-        public bool GatherJumpInput() => dashInputAction.IsPressed();
+        public bool GatherDashInput() => dashInputAction.IsPressed();
         
-        public bool GatherCrouchInput() => cast1InputAction.IsPressed();
+        public bool GatherCast1Input() => cast1InputAction.IsPressed();
 
         public Vector2 GatherMoveInput() => moveInputAction.ReadValue<Vector2>();
-        
+
         #endregion
     }
 }

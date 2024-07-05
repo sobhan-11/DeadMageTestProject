@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ namespace CoreGame
         Vector2 currentDir = Vector2.zero;
         Vector2 currentDirVelocity = Vector2.zero;
         Vector3 velocity;
+        private bool canMove;
 
         [Header(" Look ")] 
         [SerializeField, Range(4f, 8f)] private float lookRotationSpeed = 4;
@@ -32,6 +34,8 @@ namespace CoreGame
         {
             animationHandler = _animationHandler;
             velocity=Vector3.zero;
+            InitCastHandlers();
+            OnEndAbilities();
         }
 
         #region Move
@@ -39,6 +43,8 @@ namespace CoreGame
         public void ApplyMove(Vector2 moveInput)
         {
             // TODO Check For Ability isUsing and if true return
+            if(!canMove)
+                return;
             GatherMoveData(moveInput);
             body.Move(velocity * Time.fixedDeltaTime);
             HandleLook(moveInput);
@@ -68,6 +74,9 @@ namespace CoreGame
                 //TODO SFX on stop walk
             }
         }
+
+        public void DisableMove() => canMove = false;
+        public void EnableMove() => canMove = true;
         
         #endregion
 
@@ -75,15 +84,6 @@ namespace CoreGame
 
         private void HandleLook(Vector2 direction)
         {
-            // if(lockLook)
-            //     return;
-
-            // Vector2 targetLook = new Vector2(direction.x, direction.y);
-            //
-            // currentLookDelta = Vector2.SmoothDamp(currentLookDelta, targetLook, ref currentLookDeltaVelocity, lookSmoothTime);
-            //
-            // transform.Rotate(Vector3.up * (currentLookDelta.x * lookRotationSpeed));
-            
             UpdateTargetRotation();
             transform.rotation =
                 Quaternion.RotateTowards(transform.rotation, targetRotation, (lookRotationSpeed*100) * Time.fixedDeltaTime);
@@ -107,10 +107,52 @@ namespace CoreGame
         
         #endregion
 
+        #region Dash
+
+        public void HandleDash(bool isDashPressed)
+        {
+            if(!isDashPressed)
+                return;
+            var caster0 = castHandlers[0]; // Dash as a passive ability should always be index 0 in casthandlers list.
+            var abilityDash = (caster0.abilities[0] as AbilityDash);
+            if (caster0.isUsing)
+                return;
+            if(!CanUse()) // Check For Ability intruption
+                return;
+            DisableMove();
+            animationHandler.SetDashState(true);
+            abilityDash.ApplyDash(()=>
+            {
+                animationHandler.SetDashState(false);
+                OnEndAbilities();
+            });
+        }
+
+        #endregion
+
+        #region Abilities
+
+        private void InitCastHandlers()
+        {
+            for (int i = 0; i < castHandlers.Length; i++)
+            {
+                castHandlers[i].Init();
+            }
+        }
+
+        private void OnEndAbilities()
+        {
+            EnableMove();
+        }
+
+        #endregion
+        
         #region Utils
 
         public AnimationHandler GetAnimationHandler() => this.animationHandler;
-        
+
+        private bool CanUse()=> !castHandlers.Any(x => x.isUsing);
+
         #endregion
     }
 }

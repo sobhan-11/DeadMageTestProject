@@ -33,7 +33,7 @@ namespace CoreGame
 
         #region Dash
 
-        public void SetDashState(bool isCrouching) => animator.SetBool(DASH, isCrouching);
+        public void SetDashState(bool isDash) => animator.SetBool(DASH, isDash);
 
         #endregion
 

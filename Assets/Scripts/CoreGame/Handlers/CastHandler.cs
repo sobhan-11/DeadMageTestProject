@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UI;
 using UnityEngine;
 
@@ -11,10 +12,39 @@ namespace CoreGame
         [Header(" Setup ")] 
         public int index;
         public Sprite[] icon;
-        
+
+        public List<Ability> abilities;
         public List<AbilityAction> actions=new();
+        public bool isUsing { get; protected set; }
+        private int currentActionOrder;
 
+        public void Init()
+        {
+            OnAbilityEnd();
+            for (int i = 0; i < abilities.Count; i++)
+            {
+                abilities[i].Init(this);
+            }
+            currentActionOrder = 0;
+            //TODO Init HUD
 
+        }
+        
+        
+
+        #region Events
+
+        public void OnAbilityStart()
+        {
+            isUsing = true;
+        }
+        
+        public void OnAbilityEnd()
+        {
+            isUsing = false;
+        }
+
+        #endregion
 
         #region HUD
 
