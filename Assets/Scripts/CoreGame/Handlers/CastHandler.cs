@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UI;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace CoreGame
 {
     public class CastHandler : MonoBehaviour
     {
+        private ActionHandler _actionHandler;
         private AbilityViewHUD _abilityViewHUD;
         
         [Header(" Setup ")] 
@@ -16,32 +18,86 @@ namespace CoreGame
         public List<Ability> abilities;
         public List<AbilityAction> actions=new();
         public bool isUsing { get; protected set; }
-        private int currentActionOrder;
+        public int currentActionOrder;
+        
+        [Header(" Events "),Space(5)]
+        public UnityEvent onStartAbility;
+        public UnityEvent onEndAbility;
 
-        public void Init()
+        private AbilityAction _currentAction;
+
+        public void Init(ActionHandler actionHandler)
         {
-            OnAbilityEnd();
+            _actionHandler = actionHandler;
+            isUsing = false;
             for (int i = 0; i < abilities.Count; i++)
             {
                 abilities[i].Init(this);
             }
+            
             currentActionOrder = 0;
             //TODO Init HUD
 
         }
         
-        
-
-        #region Events
-
-        public void OnAbilityStart()
+        public void StartCast()
         {
+            _currentAction = actions.Find(x => x.castOrder == currentActionOrder);
             isUsing = true;
+
+            onStartAbility?.Invoke();
+            InvokeAction(_currentAction);
         }
         
-        public void OnAbilityEnd()
+        #region Events
+        
+        public void EndAbility(bool setCoolDown = true)
         {
-            isUsing = false;
+            if (isUsing)
+            {
+                EnableMove();
+                
+                var endAction = actions.Find(x => x.endsAbility == true);
+                if (endAction && setCoolDown)
+                {
+                    var coolDown = endAction.coolDown;
+                    endAction.HandleCoolDown(coolDown);
+                }
+
+                onEndAbility?.Invoke();
+                
+                isUsing = false;
+                StopAllCoroutines();
+            }
+        }
+
+        #endregion
+
+        #region CoolDown
+
+        private float coolDown; 
+        private float lastUsed;
+        
+        public float remainingCoolDown
+        {
+            get
+            {
+                if (lastUsed == 0)
+                    return 0;
+                var c = (coolDown - (Time.time - lastUsed));
+                return c > 0 ? c : 0;
+            }
+        }
+        
+        public void StartCooldown(float _cooldown)
+        {
+            if (coolDown > _cooldown)
+            {
+                return;
+            }
+
+            coolDown = _cooldown;
+            lastUsed = Time.time;
         }
 
         #endregion
@@ -102,5 +158,28 @@ namespace CoreGame
         }
 
         #endregion
+
+        #region Action
+
+        private void InvokeAction(AbilityAction action)
+        {
+            action.InvokeAction();
+        }
+        
+        #endregion
+
+        #region Utils
+
+        public void EnableMove() => _actionHandler.EnableMove();
+        public void DisableMove() => _actionHandler.DisableMove();
+
+        #endregion
+    }
+    
+    [Serializable]
+    public class ResourceCost
+    {
+        public Enum_StatsType resource;
+        public int cost;
     }
 }

@@ -25,7 +25,7 @@ namespace CoreGame
         public override void OnTakeDamage(float damage,float currentHp)
         {
             ShowDamageVisual(damage);
-            _animationHandler.PlayHitAnimation();
+            animationHandler.PlayHitAnimation();
             hpBar.SetHpBar(currentHp);
         }
 

@@ -44,7 +44,7 @@ public class Player : Actor
             maxHP = 150,
             statPercent = 1
         });
-        actionHandler.Init(_animationHandler);
+        actionHandler.Init(animationHandler);
         playerInput.enabled=false;
         
         if (_inputHandler == null) 

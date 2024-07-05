@@ -9,8 +9,7 @@ public class AbilityDash : Ability
     [Header(" Components ")] 
     [SerializeField] private CharacterController body;
     
-    [Header(" Config ")] 
-    [SerializeField] private AnimationCurve dashSpeedEaseCurve;
+    [Header(" Config ")]
     [SerializeField] private LayerMask stopLayer;
     [SerializeField] private float range;
     [SerializeField] private float speed;
@@ -23,8 +22,7 @@ public class AbilityDash : Ability
     private float duration;
     private float remainingTime;
     private bool isEnable;
-
-    private Action onEndDash;
+    
 
     private void FixedUpdate()
     {
@@ -33,21 +31,18 @@ public class AbilityDash : Ability
         HandleDash();
     }
 
-    public void ApplyDash(Action onEnd = null)
+    public void ApplyDash()
     {
-        if(_castHandler.isUsing)
-            return; 
         if(isEnable)
             return;
+        velocity = body.velocity;
         target = GetOptimalTargetPosition();
         startTime = Time.time;
         startPosition = transform.position;
         travelPath = target - startPosition;
         duration = travelPath.magnitude / speed;
         remainingTime = duration;
-        onEndDash = onEnd;
         isEnable = true;
-        _castHandler.OnAbilityStart();
     }
 
     private void HandleDash()
@@ -61,29 +56,13 @@ public class AbilityDash : Ability
     private void GatherDashData()
     {
         remainingTime = duration - (Time.time - startTime);
-        // float t = (float)(1 - remainingTime / duration);
-        //
-        // float x = dashSpeedEaseCurve.Evaluate(t);
-        //
-        // pos = startPos + (travelPath * x);
-        // pos.y += (y * maxHeight);
-        //
-        //
-        // lastPos = transform.position;
-        //
-        // transform.position = pos;
-        // remainingTime = Time.time - startTime;
-        // var x = dashSpeedEaseCurve.Evaluate(elapsedTime / remainingTime);
-        
         velocity = transform.forward * speed;
     }
 
-    private void OnDashEnd()
+    public void OnDashEnd()
     {
-        _castHandler.OnAbilityEnd();
         isEnable = false;
-        onEndDash?.Invoke();
-        onEndDash = null;
+        _castHandler.EndAbility();
     }
 
 

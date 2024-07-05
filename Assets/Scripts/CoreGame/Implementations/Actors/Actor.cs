@@ -9,11 +9,10 @@ namespace CoreGame
         [Header("Components"), Space]
         [SerializeField] protected StatsHandler statsHandler;
         [SerializeField] protected GFXHandler gfxHandler;    
-        protected AnimationHandler _animationHandler;
+        [SerializeField] protected AnimationHandler animationHandler;
 
         private void Awake()
         {
-            _animationHandler = new AnimationHandler(GetComponentInChildren<Animator>());
             Init();
         }
 

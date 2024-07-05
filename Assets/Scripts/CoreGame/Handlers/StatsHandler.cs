@@ -73,6 +73,7 @@ namespace CoreGame
         HP=1,
         Damage=2,
         MoveSpeed=3,
+        Signature = 4,
     }
 
     public struct InitStat

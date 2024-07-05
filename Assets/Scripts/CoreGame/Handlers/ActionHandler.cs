@@ -9,7 +9,7 @@ namespace CoreGame
     {
         [Header(" Components "), Space(5)]
         [SerializeField] private CharacterController body;
-        private AnimationHandler animationHandler;
+        private AnimationHandler _animationHandler;
 
         [Header(" Move "), Space(5)]
         [SerializeField, Range(0f, 100f)] private float moveSpeed = 4f;
@@ -30,9 +30,9 @@ namespace CoreGame
         [SerializeField] private CastHandler[] castHandlers;
 
         
-        public void Init(AnimationHandler _animationHandler)
+        public void Init(AnimationHandler animationHandler)
         {
-            animationHandler = _animationHandler;
+            _animationHandler = animationHandler;
             velocity=Vector3.zero;
             InitCastHandlers();
             OnEndAbilities();
@@ -65,12 +65,12 @@ namespace CoreGame
         {
             if (moveInput.magnitude == 0)
             {
-                animationHandler.StopWalk();
+                _animationHandler.StopWalk();
                 //TODO SFX on start walk
             }
             else
             {
-                animationHandler.PlayWalkAnimation(moveInput , moveSpeed);
+                _animationHandler.PlayWalkAnimation(moveInput , moveSpeed);
                 //TODO SFX on stop walk
             }
         }
@@ -119,13 +119,17 @@ namespace CoreGame
                 return;
             if(!CanUse()) // Check For Ability intruption
                 return;
-            DisableMove();
-            animationHandler.SetDashState(true);
-            abilityDash.ApplyDash(()=>
-            {
-                animationHandler.SetDashState(false);
-                OnEndAbilities();
-            });
+            
+            caster0.StartCast();
+            // DisableMove();
+            //
+            //
+            // animationHandler.SetDashState(true);
+            // abilityDash.ApplyDash(()=>
+            // {
+            //     animationHandler.SetDashState(false);
+            //     OnEndAbilities();
+            // });
         }
 
         #endregion
@@ -136,7 +140,7 @@ namespace CoreGame
         {
             for (int i = 0; i < castHandlers.Length; i++)
             {
-                castHandlers[i].Init();
+                castHandlers[i].Init(this);
             }
         }
 
@@ -148,8 +152,6 @@ namespace CoreGame
         #endregion
         
         #region Utils
-
-        public AnimationHandler GetAnimationHandler() => this.animationHandler;
 
         private bool CanUse()=> !castHandlers.Any(x => x.isUsing);
 

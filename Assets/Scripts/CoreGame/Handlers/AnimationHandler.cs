@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace CoreGame
 {
-    public class AnimationHandler
+    public class AnimationHandler : MonoBehaviour
     {
-        private Animator animator;
+        private Animator _animator;
 
         [Header("Const - Walk")] 
         private const string WALK = "Walk";
@@ -12,28 +13,26 @@ namespace CoreGame
         private const string DASH = "Dash";
         private const string HIT = "Hit";
 
-
-        public AnimationHandler(Animator _animator)
+        private void Awake()
         {
-            animator = _animator;
+            _animator = GetComponentInChildren<Animator>();
         }
-        
-        
+
         #region Walk
         
         public void PlayWalkAnimation(Vector2 dir , float moveSpeed = 1f)
         {
-            animator.SetBool(WALK, true);
-            animator.SetFloat(WALK_SPEEED,moveSpeed);
+            _animator.SetBool(WALK, true);
+            _animator.SetFloat(WALK_SPEEED,moveSpeed);
         }
 
-        public void StopWalk() => animator.SetBool(WALK, false);
+        public void StopWalk() => _animator.SetBool(WALK, false);
         
         #endregion
 
         #region Dash
 
-        public void SetDashState(bool isDash) => animator.SetBool(DASH, isDash);
+        public void SetDashState(bool isDash) => _animator.SetBool(DASH, isDash);
 
         #endregion
 
@@ -41,7 +40,7 @@ namespace CoreGame
 
         public void PlayHitAnimation()
         {
-            animator.SetTrigger(HIT);
+            _animator.SetTrigger(HIT);
         }
 
         #endregion
