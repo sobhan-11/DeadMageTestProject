@@ -76,11 +76,11 @@ namespace CoreGame
                     var coolDown = endAction.coolDown;
                     endAction.HandleCoolDown(coolDown);
                     ResetActionOrder();
-                    onEndAbility?.Invoke();
                     StopAllCoroutines();
                 }
                 
                 isUsing = false;
+                onEndAbility?.Invoke();
             }
         }
         
@@ -88,6 +88,7 @@ namespace CoreGame
         {
             ResetActionOrder(); 
             isUsing = false;
+            EnableMove();
         }
 
         #endregion
