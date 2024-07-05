@@ -14,6 +14,8 @@ public class MetaManager : MonoBehaviour
 
     [SerializeField] private MenuCard[] menuCards;
     private int _selectedCenuCardIndex;
+    private bool _isSwitching;
+    private float _timer;
     
     private void Awake()
     {
@@ -37,28 +39,43 @@ public class MetaManager : MonoBehaviour
         menuCards[_selectedCenuCardIndex].OnSelect();
     }
     
-    private void Update()
+    public void Click()
     {
-        if(inputHandler.GatherClickInput())
-            menuCards[_selectedCenuCardIndex].button.onClick?.Invoke();
-        else if (inputHandler.GatherSwitchUpInput())
-        {
-            menuCards[_selectedCenuCardIndex].OnDeSelect();
-            if (_selectedCenuCardIndex == 0)
-                _selectedCenuCardIndex = menuCards.Length - 1;
-            else
-                _selectedCenuCardIndex--;
-            menuCards[_selectedCenuCardIndex].OnSelect();
-        }
-        else if(inputHandler.GatherSwitchdownInput())
-        {
-            menuCards[_selectedCenuCardIndex].OnDeSelect();
-            if (_selectedCenuCardIndex >= menuCards.Length - 1)
-                _selectedCenuCardIndex = 0;
-            else
-                _selectedCenuCardIndex++;
-            menuCards[_selectedCenuCardIndex].OnSelect();
-        }
+        menuCards[_selectedCenuCardIndex].button.onClick?.Invoke();
+    }
+    
+    public void SwitchUp()
+    {
+        if(_isSwitching)
+            return;
+        _isSwitching = true;
+        menuCards[_selectedCenuCardIndex].OnDeSelect();
+        if (_selectedCenuCardIndex == 0)
+            _selectedCenuCardIndex = menuCards.Length - 1;
+        else
+            _selectedCenuCardIndex--;
+        menuCards[_selectedCenuCardIndex].OnSelect();
+        StartCoroutine(SwitchRoutine());
+    }
+
+    public void SwitchDown()
+    {
+        if(_isSwitching)
+            return;
+        _isSwitching = true;
+        menuCards[_selectedCenuCardIndex].OnDeSelect();
+        if (_selectedCenuCardIndex >= menuCards.Length - 1)
+            _selectedCenuCardIndex = 0;
+        else
+            _selectedCenuCardIndex++;
+        menuCards[_selectedCenuCardIndex].OnSelect();
+        StartCoroutine(SwitchRoutine());
+    }
+
+    private IEnumerator SwitchRoutine()
+    {
+        yield return new WaitForSeconds(.5f);
+        _isSwitching = false;
     }
 
     public void SetController(PlayerInput playerInput)

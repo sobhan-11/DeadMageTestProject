@@ -2467,15 +2467,51 @@ MonoBehaviour:
     m_ActionId: 8125a7b9-2d52-4b0b-b003-21d6ff07b12e
     m_ActionName: CoreGame/Cast1[/Mouse/leftButton]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1721877429}
+        m_TargetAssemblyTypeName: MetaManager, Assembly-CSharp
+        m_MethodName: Click
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: b3c20ec3-7e36-43e3-9e21-6a333a64cd4a
     m_ActionName: Meta/Click[/Mouse/leftButton]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1721877429}
+        m_TargetAssemblyTypeName: MetaManager, Assembly-CSharp
+        m_MethodName: SwitchUp
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: f2006357-129b-4225-97dc-7905175741b0
     m_ActionName: Meta/SwitchUp
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1721877429}
+        m_TargetAssemblyTypeName: MetaManager, Assembly-CSharp
+        m_MethodName: SwitchDown
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 580bd4f6-c348-457d-9b56-4d677aa77618
     m_ActionName: Meta/SwitchDown
   m_NeverAutoSwitchControlSchemes: 0
